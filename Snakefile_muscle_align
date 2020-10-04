@@ -1,0 +1,19 @@
+import os
+import sys
+
+IN_DIR = '02.fastaPerQuery'  
+OUT_DIR = '03.alignedFastas'
+
+
+SAMPLES =  [s[:-6] for s in os.listdir(IN_DIR) if s.endswith(".fasta")]
+
+rule all:
+    input:  expand(OUT_DIR+"/{s}.muscle.fasta",s=SAMPLES),            
+    message: "Done "
+
+
+
+rule align:
+    input:  IN_DIR+"/{s}.fasta"
+    output: OUT_DIR+"/{s}.muscle.fasta"
+    shell: "muscle -in {input} -out {output}"
